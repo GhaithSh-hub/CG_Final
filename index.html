@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>سباق التفادي — Endless Dodge Racer</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- كل عناصر الواجهة HTML عادية فوق الـ canvas، لا نصوص داخل المشهد ثلاثي الأبعاد -->
+
+    <!-- أعلى اليسار: النقاط وأفضل نتيجة -->
+    <div id="hud-left" class="hud-panel">
+      <div class="hud-row">
+        <span class="hud-label">النقاط</span>
+        <span id="score-value" class="hud-value">0</span>
+      </div>
+      <div class="hud-row hud-row-small">
+        <span class="hud-label">أفضل نتيجة</span>
+        <span id="best-value" class="hud-value">0</span>
+      </div>
+    </div>
+
+    <!-- أعلى اليمين: عدّاد الوقود/الوقت -->
+    <div id="hud-right" class="hud-panel">
+      <span class="hud-label">الوقود</span>
+      <span id="time-value" class="hud-value">30.0</span>
+    </div>
+
+    <!-- شريط أفقي رفيع يمثّل الوقت المتبقي بصرياً -->
+    <div id="time-bar-track">
+      <div id="time-bar-fill"></div>
+    </div>
+
+    <!-- شاشة البداية: تختفي عند أول ضغطة مفتاح -->
+    <div id="start-screen" class="overlay">
+      <div class="overlay-card">
+        <h1 class="game-title">سباق التفادي</h1>
+        <p class="game-subtitle">ENDLESS DODGE RACER</p>
+        <ul class="instructions">
+          <li><b>◀ ▶</b> للمناورة يميناً ويساراً</li>
+          <li>أحد نوعي الحواجز ثابت في مكانه، والآخر يتأرجح يميناً ويساراً</li>
+          <li>اجمع براميل الوقود لتمديد العدّاد <b>(+5 ثوانٍ)</b></li>
+          <li>السرعة تزداد كل 15 ثانية… استعدّ</li>
+        </ul>
+        <p id="loading-status" class="prompt">⏳ جارٍ تحميل النماذج ثلاثية الأبعاد...</p>
+        <p class="prompt" id="ready-prompt" style="display: none;">اضغط أي مفتاح للانطلاق</p>
+      </div>
+    </div>
+
+    <!-- شاشة النهاية -->
+    <div id="end-screen" class="overlay hidden">
+      <div class="overlay-card">
+        <h2 id="end-reason" class="end-reason">اصطدام!</h2>
+        <div class="final-block">
+          <span class="hud-label">النتيجة النهائية</span>
+          <span id="final-score" class="final-score">0</span>
+        </div>
+        <div class="final-block">
+          <span class="hud-label">أفضل نتيجة</span>
+          <span id="final-best" class="final-best">0</span>
+        </div>
+        <p class="prompt">اضغط <b>المسافة</b> لإعادة المحاولة</p>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

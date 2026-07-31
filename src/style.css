@@ -1,0 +1,248 @@
+/* =========================================================
+   واجهة اللعبة — عناصر HTML مطلقة الموضع فوق الـ canvas
+   ========================================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow: hidden;
+  background: #87ceeb;
+  font-family: "Segoe UI", Tahoma, "Noto Kufi Arabic", sans-serif;
+  color: #ffffff;
+  /* منع تحديد النص عند الضغط السريع على المفاتيح */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* الـ canvas الذي يولّده WebGLRenderer يملأ الشاشة خلف كل شيء */
+canvas {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+}
+
+/* ---------- لوحات المعلومات (HUD) ---------- */
+
+.hud-panel {
+  position: absolute;
+  top: 18px;
+  z-index: 10;
+  padding: 12px 18px;
+  border-radius: 14px;
+  background: rgba(12, 18, 28, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+#hud-left {
+  left: 18px;
+}
+
+#hud-right {
+  right: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 130px;
+}
+
+.hud-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.hud-row-small {
+  margin-top: 4px;
+  opacity: 0.75;
+}
+
+.hud-label {
+  font-size: 13px;
+  letter-spacing: 1px;
+  opacity: 0.85;
+}
+
+.hud-value {
+  font-size: 30px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums; /* يمنع اهتزاز العرض مع تغيّر الأرقام */
+}
+
+.hud-row-small .hud-value {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#time-value {
+  font-size: 38px;
+  color: #7dffb0;
+  transition: color 0.2s linear;
+}
+
+/* تحذير تحت 10 ثوانٍ */
+#time-value.warn {
+  color: #ff8a3d;
+}
+
+/* خطر تحت 5 ثوانٍ: أحمر + وميض */
+#time-value.danger {
+  color: #ff3b3b;
+  animation: blink 0.45s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  to {
+    opacity: 0.25;
+  }
+}
+
+/* ---------- شريط الوقت ---------- */
+
+#time-bar-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 7px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+#time-bar-fill {
+  height: 100%;
+  width: 75%;
+  background: linear-gradient(90deg, #16d97a, #7dffb0);
+  box-shadow: 0 0 14px rgba(45, 230, 140, 0.85);
+  /* العرض يُحدَّث من الكود؛ الانتقال يجعل التمدد عند جمع برميل ناعماً */
+  transition: width 0.12s linear, background 0.25s linear;
+}
+
+#time-bar-fill.warn {
+  background: linear-gradient(90deg, #d97016, #ffb03d);
+  box-shadow: 0 0 14px rgba(230, 150, 45, 0.85);
+}
+
+#time-bar-fill.danger {
+  background: linear-gradient(90deg, #b81212, #ff5a5a);
+  box-shadow: 0 0 16px rgba(230, 60, 60, 0.9);
+}
+
+/* ---------- الشاشات الكاملة (البداية والنهاية) ---------- */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle at center,
+    rgba(6, 10, 18, 0.55) 0%,
+    rgba(6, 10, 18, 0.86) 100%
+  );
+  pointer-events: none;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  text-align: center;
+  padding: 38px 54px;
+  border-radius: 22px;
+  background: rgba(10, 16, 26, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  animation: pop 0.28s ease-out;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+
+.game-title {
+  font-size: 54px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  background: linear-gradient(180deg, #ffffff, #8fd0ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.game-subtitle {
+  font-size: 14px;
+  letter-spacing: 6px;
+  opacity: 0.55;
+  margin-top: 4px;
+  direction: ltr;
+}
+
+.instructions {
+  list-style: none;
+  margin: 26px 0 10px;
+  font-size: 17px;
+  line-height: 2.1;
+  opacity: 0.9;
+}
+
+.instructions b {
+  color: #7dffb0;
+}
+
+.prompt {
+  margin-top: 22px;
+  font-size: 19px;
+  font-weight: 600;
+  color: #ffd97d;
+  animation: pulse 1.1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  to {
+    opacity: 0.35;
+  }
+}
+
+.end-reason {
+  font-size: 42px;
+  font-weight: 800;
+  color: #ff5a5a;
+  margin-bottom: 22px;
+}
+
+.final-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 14px;
+}
+
+.final-score {
+  font-size: 52px;
+  font-weight: 800;
+  color: #7dffb0;
+  font-variant-numeric: tabular-nums;
+}
+
+.final-best {
+  font-size: 26px;
+  font-weight: 700;
+  opacity: 0.8;
+  font-variant-numeric: tabular-nums;
+}
